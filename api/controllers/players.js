@@ -1,4 +1,5 @@
 const playerModel = require("../models/players");
+const fs = require('fs')
 
 module.exports = {
   getById: function(req, res, next) {
@@ -73,5 +74,41 @@ module.exports = {
   },
 
   create: function(req, res, next) {
+    //use the fs object's rename method to re-name the file
+    fs.rename(req.file.path, req.file.path + ".jpg", function(err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      console.log("The file has been re-named to: " + req.file.path + ".jpg");
+    });
+    const player = new Player({
+      _id: new mongoose.Types.ObjectId(),
+      name: req.body.name,
+      image: req.file.path + ".jpg"
+    });
+    player
+      .save()
+      .then(result => {
+        console.log(result);
+        res.status(201).json({
+          message: "Created player successfully"
+          // createdPlayer: {
+          //     name: result.name,
+          //     _id: result._id,
+          //     // request: {
+          //     //     type: 'GET',
+          //     //     url: "http://localhost:5000/api/players/" + result._id
+          //     // }
+          // }
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
   }
 };
