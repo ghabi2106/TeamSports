@@ -1,0 +1,41 @@
+{
+  "name": "teamsports",
+  "version": "1.0.0",
+  "description": "Manage team sports",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghabi2106/TeamSports.git"
+  },
+  "keywords": [
+    "restful",
+    "api",
+    "teamsports",
+    "node"
+  ],
+  "author": "Ghabi Assaad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ghabi2106/TeamSports/issues"
+  },
+  "homepage": "https://github.com/ghabi2106/TeamSports#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "config": "^3.2.2",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-validator": "^6.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.11",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2"
+  }
+}
