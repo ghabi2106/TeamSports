@@ -7,10 +7,16 @@ const mongoose = require("mongoose");
 const Player = require("../api/models/players");
 const fs = require('fs')
 router.post("/", upload.single('image'), (req, res, next) => {
+  //use the fs object's rename method to re-name the file
+  fs.rename(req.file.path, req.file.path+".jpg", function (err) {
+  if (err) {console.log(err); return; }
+   
+  console.log('The file has been re-named to: '+req.file.path+".jpg");
+  });
     const player = new Player({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
-      image: req.file.path 
+      image: req.file.path+".jpg"
     });
     player
       .save()
