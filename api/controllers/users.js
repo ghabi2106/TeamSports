@@ -1,6 +1,7 @@
 const userModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const config = require('config');
 
 module.exports = {
   create: function(req, res, next) {
@@ -33,7 +34,7 @@ module.exports = {
         ) {
           const token = jwt.sign(
             { id: userInfo._id },
-            req.app.get("secretKey"),
+            config.get('jwtSecret'),
             { expiresIn: "1h" }
           );
 
