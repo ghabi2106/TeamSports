@@ -84,10 +84,16 @@ module.exports = {
 
       console.log("The file has been re-named to: " + req.file.path + ".jpg");
     });
+    let fileExt = "";
+    if (req.file.mimetype === 'image/jpeg') {
+      fileExt = ".jpg";
+    } else if (req.file.mimetype === 'image/png') {
+      fileExt = ".png";
+    }
     const player = new playerModel({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
-      image: req.file.path + ".jpg"
+      image: req.file.path + fileExt
     });
     player
       .save()
