@@ -1,5 +1,6 @@
 const playerModel = require("../models/players");
-const fs = require('fs')
+const fs = require('fs');
+const mongoose = require("mongoose");
 
 module.exports = {
   getById: function(req, res, next) {
@@ -83,7 +84,7 @@ module.exports = {
 
       console.log("The file has been re-named to: " + req.file.path + ".jpg");
     });
-    const player = new Player({
+    const player = new playerModel({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       image: req.file.path + ".jpg"
