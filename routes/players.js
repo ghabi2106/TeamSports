@@ -5,7 +5,7 @@ const upload = require('../middleware/upload');
 
 const mongoose = require("mongoose");
 const Player = require("../api/models/players");
-const fs = require('fs')
+const fs = require('fs');
 // router.post("/", upload.single('image'), (req, res, next) => {
 //   //use the fs object's rename method to re-name the file
 //   fs.rename(req.file.path, req.file.path+".jpg", function (err) {
