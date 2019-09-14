@@ -5,14 +5,7 @@ const config = require("config");
 const { validationResult } = require("express-validator/check");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
-const transporter = nodemailer.createTransport(
-  sendgridTransport({
-    auth: {
-      api_key:
-        "put your API Key here"
-    }
-  })
-);
+const transporter = require("../../config/mail");
 
 module.exports = {
   create: function(req, res, next) {
