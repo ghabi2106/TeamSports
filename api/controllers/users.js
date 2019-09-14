@@ -5,14 +5,11 @@ const config = require("config");
 const { validationResult } = require("express-validator/check");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
-//SendGrid
-//API Key ID: G-tcaqM0T7OZ2sa92QypuQ
-//API Key: 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
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
       api_key:
-        "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"
+        "put your API Key here"
     }
   })
 );
