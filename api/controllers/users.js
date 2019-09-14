@@ -8,6 +8,90 @@ const sendgridTransport = require("nodemailer-sendgrid-transport");
 const transporter = require("../../config/mail");
 
 module.exports = {
+  create: async (req, res, next) => {
+    const { name, email, password } = req.body;
+    await userModel
+      .create({
+        name,
+        email,
+        password
+      })
+      .then(() => {
+        res.json({
+          status: "success",
+          message: "User added successfully!!!",
+          data: null
+        });
+      })
+      .catch(err => {
+        next(err);
+      });
+  },
+  signup: async (req, res, next) => {
+    const { name, email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      let userInfo = await userModel.findOne({ email });
+      if (userInfo) {
+        res.status(400).json({ message: "Email Already Exist!!!" });
+      } else {
+        await userModel
+          .create({
+            name,
+            email,
+            password
+          })
+          .then(() => {
+            transporter.sendMail({
+              to: email,
+              from: "teamsports@teamsports.com",
+              subject: "Signup succeeded!",
+              html: "<h1>You successfully signed up!</h1>"
+            });
+            res.json({
+              status: "success",
+              message: "User added successfully!!!",
+              data: null
+            });
+          });
+      }
+    } catch (err) {
+      next(err);
+    }
+  },
+  authenticate: function(req, res, next) {
+    const { name, email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+    }
+    try{
+      let userInfo = await userModel.findOne({ email });
+      if ( userInfo != null && bcrypt.compareSync(password, userInfo.password)) {
+        const token = jwt.sign(
+          { id: userInfo._id },
+          config.get("jwtSecret"),
+          { expiresIn: "1h" }
+        );
+
+        res.status(200).json({
+          status: "success",
+          message: "user found!!!",
+          data: { user: userInfo, token: token }
+        });
+      } else {
+        res.status(400).json({ message: "Invalid email/password!!!"});
+      }
+    } catch(err){
+      next(err)
+    }
+  }
+};
+
+/* module.exports = {
   create: function(req, res, next) {
     userModel.create(
       {
@@ -100,4 +184,4 @@ module.exports = {
       }
     });
   }
-};
+}; */

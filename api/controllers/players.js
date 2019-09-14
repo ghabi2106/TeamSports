@@ -1,44 +1,46 @@
 const playerModel = require("../models/players");
-const fs = require('fs');
+const fs = require("fs");
 const mongoose = require("mongoose");
 
 module.exports = {
-  getById: function(req, res, next) {
-    console.log(req.body);
-    playerModel.findById(req.params.playerId, function(err, playerInfo) {
-      if (err) {
-        next(err);
-      } else {
-        res.json({
-          status: "success",
-          message: "Player found!!!",
-          data: { players: playerInfo }
-        });
-      }
-    });
+  getById: async (req, res, next) => {
+    try {
+      let playerInfo = await playerModel.findById(req.params.playerId);
+      playerInfo
+        ? res.status(200).json({
+            status: "success",
+            message: "Player found!!!",
+            data: { players: playerInfo }
+          })
+        : res.status(400).json({
+            status: "Error",
+            message: "Player not found!!!",
+            data: { players: playerInfo }
+          });
+    } catch (err) {
+      next(err);
+    }
   },
 
   getAll: function(req, res, next) {
     let playersList = [];
-
-    playerModel.find({}, function(err, players) {
-      if (err) {
-        next(err);
-      } else {
-        for (let player of players) {
-          playersList.push({
-            id: player._id,
-            name: player.name,
-            released_on: player.released_on
-          });
-        }
-        res.json({
-          status: "success",
-          message: "Players list found!!!",
-          data: { players: playersList }
+    try {
+      let players = playerModel.find({});
+      for (let player of players) {
+        playersList.push({
+          id: player._id,
+          name: player.name,
+          released_on: player.released_on
         });
       }
-    });
+      res.json({
+        status: "success",
+        message: "Players list found!!!",
+        data: { players: playersList }
+      });
+    } catch (err) {
+      next(err);
+    }
   },
 
   updateById: function(req, res, next) {
@@ -85,9 +87,9 @@ module.exports = {
       console.log("The file has been re-named to: " + req.file.path + ".jpg");
     });
     let fileExt = "";
-    if (req.file.mimetype === 'image/jpeg') {
+    if (req.file.mimetype === "image/jpeg") {
       fileExt = ".jpg";
-    } else if (req.file.mimetype === 'image/png') {
+    } else if (req.file.mimetype === "image/png") {
       fileExt = ".png";
     }
     const player = new playerModel({
